@@ -4,8 +4,8 @@ const cors = require("cors")
 const port = process.env.PORT || 3003
 const mongodb = require("mongodb")
 const mongoclient = mongodb.MongoClient;
-//const url = 'mongodb://localhost:27017';
-const url = "mongodb+srv://ganesh:chitra@cluster0.2pjhw.mongodb.net/booking?retryWrites=true&w=majority"
+const url = 'mongodb://localhost:27017';
+//const url = "mongodb+srv://ganesh:chitra@cluster0.2pjhw.mongodb.net/booking?retryWrites=true&w=majority"
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken")
 
@@ -971,7 +971,7 @@ app.post("/cartm", [authenthicate], async function(req, res) {
         }).toArray();
         selected.map(o => o.userid = req.userid)
         console.log(selected)
-        let post = await db.collection("selected").insertMany(selected)
+        let post = await db.collection("selected").insertOne(selected)
         await client.close()
     } catch (error) {
         console.log("error33")
@@ -988,7 +988,7 @@ app.post("/cartl", [authenthicate], async function(req, res) {
         }).toArray();
         selected.map(o => o.userid = req.userid)
         console.log(selected)
-        let post = await db.collection("selected").insertMany(selected)
+        let post = await db.collection("selected").insertOne(selected)
         await client.close()
     } catch (error) {}
 })
@@ -1002,7 +1002,7 @@ app.post("/cartsz", [authenthicate], async function(req, res) {
         }).toArray();
         selected.map(o => o.userid = req.userid)
         console.log(selected)
-        let post = await db.collection("selected").insertMany(selected)
+        let post = await db.collection("selected").insertOne(selected)
         await client.close()
     } catch (error) {}
 })
@@ -1023,13 +1023,13 @@ app.get("/scarts", [authenthicate], async function(req, res) {
 
 ///////////////////////
 //////////QUANTITY , DELETE
-app.post("/qty", [authenthicate], async function(req, res) {
+app.post("/qty", async function(req, res) {
     try {
         console.log(req.body)
         let client = await mongoclient.connect(url);
         let db = client.db("cart");
         let put = await db.collection("selected").findOneAndUpdate({
-            _id: mongodb.ObjectId(req.body.id),
+            _id: mongodb.ObjectId(req.body.id)
         }, {
             $set: {
                 qty: req.body.e,
@@ -1039,7 +1039,7 @@ app.post("/qty", [authenthicate], async function(req, res) {
         console.log("success")
         await client.close()
     } catch (error) {
-
+        console.log("errorrrrrr")
     }
 })
 
