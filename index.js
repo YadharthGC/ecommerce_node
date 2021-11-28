@@ -981,6 +981,7 @@ app.post("/cartl", [authenthicate], async function(req, res) {
     try {
         let client = await mongoclient.connect(url);
         let db = client.db("cart");
+        console.log(req.userid)
         console.log(req.body)
         let selected = await db.collection("laptops").find({
             code: req.body.code
@@ -1022,13 +1023,13 @@ app.get("/scarts", [authenthicate], async function(req, res) {
 
 ///////////////////////
 //////////QUANTITY , DELETE
-app.post("/qty", async function(req, res) {
+app.post("/qty", [authenthicate], async function(req, res) {
     try {
         console.log(req.body)
         let client = await mongoclient.connect(url);
         let db = client.db("cart");
         let put = await db.collection("selected").findOneAndUpdate({
-            _id: mongodb.ObjectId(req.body.id)
+            _id: mongodb.ObjectId(req.body.id),
         }, {
             $set: {
                 qty: req.body.e,
